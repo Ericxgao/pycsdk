@@ -215,7 +215,7 @@ cdef class CSDK:
         self.sid = -1
         if license_file is not None and code is not None:
             CSDK.check_err(kRecSetLicense(license_file, code), 'kRecSetLicense')
-        CSDK.check_err(RecInitPlus(company_name, product_name), 'RecInitPlus')
+        CSDK.check_err(kRecInit(company_name, product_name), 'kRecInit')
 
         # create a settings collection for this CSDK instance
         self.sid = kRecCreateSettingsCollection(-1)
@@ -228,7 +228,7 @@ cdef class CSDK:
     def __dealloc__(self):
         if self.sid != -1:
             CSDK.check_err(kRecDeleteSettingsCollection(self.sid), 'kRecDeleteSettingsCollection')
-        CSDK.check_err(RecQuitPlus(), 'RecQuitPlus')
+        CSDK.check_err(kRecQuit(), 'kRecQuit')
 
     def __enter__(self):
         return self
