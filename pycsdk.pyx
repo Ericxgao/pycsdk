@@ -612,6 +612,23 @@ cdef class Page:
             if rc != 0x8004C708:
                 CSDK.check_err(rc, 'kRecForceDespeckleImg')
 
+    def set_rect_to_image_dimensions(self):
+        cdef RECT rect
+        imageInfo = self.get_image_info(II_CURRENT)
+        rect.top = 0
+        rect.bottom = imageInfo.size[1]
+        rect.left = 0
+        rect.right = imageInfo.size[0]
+
+        cdef ZONE zone
+        kRecInitZone(&zone)
+
+        zone.rectBBox = rect
+        cdef RECERR rc
+
+        rc = kRecInsertZone(self.handle, II_CURRENT, &zone, 0)
+        CSDK.check_err(rc, 'kRecInsertZone')
+
     @property
     def preproc_info(self):
         cdef PREPROC_INFO preproc_info;
